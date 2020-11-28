@@ -21,6 +21,9 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_SIGNED.all;
+use IEEE.STD_LOGIC_ARITH.all;
+
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -36,9 +39,12 @@ entity datapath is
            rst : in STD_LOGIC;
            selectReg : in STD_LOGIC_VECTOR (1 downto 0);
            memIn : in STD_LOGIC_VECTOR (31 downto 0);
-           selectOut : in STD_LOGIC;
            maxID : out STD_LOGIC_VECTOR (3 downto 0);
-           minID : out STD_LOGIC_VECTOR (3 downto 0));
+           minID : out STD_LOGIC_VECTOR (3 downto 0);
+           valueOutR :out STD_LOGIC_VECTOR (31 downto 0);
+           valueOutI :out STD_LOGIC_VECTOR (31 downto 0);
+           averageOutR: out STD_LOGIC_VECTOR (31 downto 0);
+           averageOutI: out STD_LOGIC_VECTOR (31 downto 0));
 end datapath;
 
 architecture Behavioral of datapath is
@@ -48,8 +54,9 @@ SIGNAL memConverted:STD_LOGIC_VECTOR (23 downto 0);
 SIGNAL A, B, C, D, E, F, G, H: STD_LOGIC_VECTOR(11 downto 0);
 SIGNAL mult0, mult1, mult2, mult3:STD_LOGIC_VECTOR (23 downto 0);
 SIGNAL sub0, sub1:STD_LOGIC_VECTOR (23 downto 0);
-SIGNAL enDelayed:STD_LOGIC;
-
+SIGNAL enDelayedAvg,enDelayedAdder:STD_LOGIC;
+SIGNAL detR, detI:STD_LOGIC_VECTOR (31 downto 0);
+SIGNAL avgR, avgI:STD_LOGIC_VECTOR (31 downto 0);
 
 COMPONENT reg
     Port ( clk : in STD_LOGIC;
@@ -102,14 +109,17 @@ COMPONENT selRegConverter is
            Q2 : out STD_LOGIC);
 end COMPONENT; 
 
-COMPONENT delay3 is
+COMPONENT delay is
     Port ( clk : in STD_LOGIC;
            D : in STD_LOGIC;
-           Q : out STD_LOGIC);
-end COMPONENT;
-        
+           Q0 : out STD_LOGIC;
+           Q1 : out STD_LOGIC);
+END COMPONENT;
+
+
+
 begin
-memConverted <=memIN(26 downto 15)&memIN(11 downto 0);
+memConverted <=memIN(27 downto 16)&memIN(11 downto 0);
 A<=reg0(23 downto 12);
 B<=reg0(11 downto 0);
 C<=reg1(23 downto 12);
@@ -119,7 +129,10 @@ F<=reg2(11 downto 0);
 G<=memConverted(23 downto 12);
 H<=memConverted(11 downto 0);
 
-
+detR <= SXT(sub0&"0000",32);
+detI <= SXT(sub1&"0000",32);
+valueOutR<=detR;
+valueOutI<=detI;
 
 inst_selRegConverter: selRegConverter port map(
     D => selectReg,
@@ -144,9 +157,9 @@ inst_reg1 : reg port map(
 inst_reg2 : reg port map(
     clk => clk, 
     rst => rst,
-    en => en1,
+    en => en2,
     D => memConverted,
-    Q => reg1);
+    Q => reg2);
 
 inst_mult0 : mult port map(
     clk => clk,
@@ -189,14 +202,29 @@ inst_adder0: adder port map(
     rst => rst,
     A => sub0,
     B => sub1,
-    en => enDelayed,
+    en => enDelayedAdder,
     minID => minID ,
     maxID =>maxID);
     
-inst_delay0: delay3 port map(
+inst_delay0: delay port map(
     clk => clk,
     D => en2,
-    Q => enDelayed);
+    Q0 => enDelayedAvg,
+    Q1 =>enDelayedAdder);
 
+inst_average0: average port map(
+    clk => clk,
+    rst  => rst,
+    en   => enDelayedAvg,
+    D  => detR,
+    Q  => averageOutR);
+    
+inst_average1: average port map(
+    clk => clk,
+    rst  => rst,
+    en   => enDelayedAvg,
+    D  => detI,
+    Q  => averageOutI);
+    
 
 end Behavioral;

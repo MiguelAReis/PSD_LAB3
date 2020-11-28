@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 11/28/2020 06:53:51 PM
+-- Create Date: 11/28/2020 10:01:11 PM
 -- Design Name: 
--- Module Name: delay3 - Behavioral
+-- Module Name: delay - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,13 +31,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity delay3 is
+entity delay is
     Port ( clk : in STD_LOGIC;
            D : in STD_LOGIC;
-           Q : out STD_LOGIC);
-end delay3;
+           Q0 : out STD_LOGIC;
+           Q1: out STD_LOGIC);
+end delay;
 
-architecture Behavioral of delay3 is
+architecture Behavioral of delay is
 
 SIGNAL n0,n1,n2,n3 : STD_LOGIC;
 begin
@@ -48,7 +49,8 @@ PROCESS(clk)
             n1 <= n0;
             n2 <= n1;
             n3 <= n2;
-            Q <= n3;
+            Q0 <= n1;
+            Q1 <=n1;
         END IF;
 END PROCESS;
 end Behavioral;

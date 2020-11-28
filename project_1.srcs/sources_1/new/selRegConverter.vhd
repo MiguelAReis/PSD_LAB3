@@ -47,11 +47,11 @@ PROCESS(D)
     Q0 <= '0';
     Q1 <='0';
     Q2 <='0';
-        IF D = "00" then
+        IF D = "01" then
             Q0 <='1';
-        ELSIF D= "01" then
+        ELSIF D= "10" then
             Q1 <='1';
-        ELSIF D ="10" then
+        ELSIF D ="11" then
             Q2 <= '1';
         END IF;
         
