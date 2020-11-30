@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 11/28/2020 10:01:11 PM
+-- Create Date: 11/28/2020 02:32:00 PM
 -- Design Name: 
--- Module Name: delay - Behavioral
+-- Module Name: reg - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,23 +31,26 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity delay is
+entity reg32 is
     Port ( clk : in STD_LOGIC;
-           D : in STD_LOGIC;
-           Q: out STD_LOGIC);
-end delay;
+           rst : in STD_LOGIC;
+           en: in STD_LOGIC;
+           D : in STD_LOGIC_VECTOR (31 downto 0);
+           Q : out STD_LOGIC_VECTOR (31 downto 0));
+end reg32;
 
-architecture Behavioral of delay is
+architecture Behavioral of reg32 is
 
-SIGNAL n0,n1 : STD_LOGIC;
 begin
 PROCESS(clk)
     BEGIN
         IF clk'event and clk ='1' then
-            n0 <= D;
-            n1 <= n0;
-            Q <= n1;
+            IF rst='1' then
+                Q<=(others => '0');
+            ELSIF en='1' then
+                Q <=D;
+            end if;
+        end if;
+    END PROCESS;
 
-        END IF;
-END PROCESS;
 end Behavioral;

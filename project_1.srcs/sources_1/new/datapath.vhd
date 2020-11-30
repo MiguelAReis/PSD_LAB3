@@ -37,13 +37,14 @@ use IEEE.STD_LOGIC_ARITH.all;
 entity datapath is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
+           final : out STD_LOGIC;
            selectReg : in STD_LOGIC_VECTOR (1 downto 0);
            memIn : in STD_LOGIC_VECTOR (31 downto 0);
            maxID : out STD_LOGIC_VECTOR (3 downto 0);
            minID : out STD_LOGIC_VECTOR (3 downto 0);
            valueOutR :out STD_LOGIC_VECTOR (31 downto 0);
            valueOutI :out STD_LOGIC_VECTOR (31 downto 0);
-           averageOutR: out STD_LOGIC_VECTOR (31 downto 0);
+           averagesOutR: out STD_LOGIC_VECTOR (31 downto 0);
            averageOutI: out STD_LOGIC_VECTOR (31 downto 0));
 end datapath;
 
@@ -54,7 +55,7 @@ SIGNAL memConverted:STD_LOGIC_VECTOR (23 downto 0);
 SIGNAL A, B, C, D, E, F, G, H: STD_LOGIC_VECTOR(11 downto 0);
 SIGNAL mult0, mult1, mult2, mult3:STD_LOGIC_VECTOR (23 downto 0);
 SIGNAL sub0, sub1:STD_LOGIC_VECTOR (23 downto 0);
-SIGNAL enDelayedAvg,enDelayedAdder:STD_LOGIC;
+SIGNAL enDelayed:STD_LOGIC;
 SIGNAL detR, detI:STD_LOGIC_VECTOR (31 downto 0);
 SIGNAL avgR, avgI:STD_LOGIC_VECTOR (31 downto 0);
 
@@ -112,8 +113,7 @@ end COMPONENT;
 COMPONENT delay is
     Port ( clk : in STD_LOGIC;
            D : in STD_LOGIC;
-           Q0 : out STD_LOGIC;
-           Q1 : out STD_LOGIC);
+           Q: out STD_LOGIC);
 END COMPONENT;
 
 
@@ -133,6 +133,8 @@ detR <= SXT(sub0&"0000",32);
 detI <= SXT(sub1&"0000",32);
 valueOutR<=detR;
 valueOutI<=detI;
+
+final<= enDelayed;
 
 inst_selRegConverter: selRegConverter port map(
     D => selectReg,
@@ -202,27 +204,26 @@ inst_adder0: adder port map(
     rst => rst,
     A => sub0,
     B => sub1,
-    en => enDelayedAdder,
+    en => enDelayed,
     minID => minID ,
     maxID =>maxID);
     
 inst_delay0: delay port map(
     clk => clk,
     D => en2,
-    Q0 => enDelayedAvg,
-    Q1 =>enDelayedAdder);
+    Q => enDelayed);
 
 inst_average0: average port map(
     clk => clk,
     rst  => rst,
-    en   => enDelayedAvg,
+    en   => enDelayed,
     D  => detR,
     Q  => averageOutR);
     
 inst_average1: average port map(
     clk => clk,
     rst  => rst,
-    en   => enDelayedAvg,
+    en   => enDelayed,
     D  => detI,
     Q  => averageOutI);
     
