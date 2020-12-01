@@ -138,8 +138,7 @@ H<=memConverted(11 downto 0);
 
 detR <= SXT(sub4&sub4(0)&sub4(0)&sub4(0)&sub4(0),32);
 detI <= SXT(sub5&sub5(0)&sub5(0)&sub5(0)&sub5(0),32);
-valueOutR<=detR;
-valueOutI<=detI;
+
 
 final<= enDelayed;
 
@@ -282,5 +281,12 @@ inst_average1: average port map(
     D  => detI,
     Q  => averageOutI);
     
-
+    
+PROCESS(clk)
+BEGIN
+    IF clk'event and clk ='1' then
+        valueOutR<=detR;
+        valueOutI<=detI;
+    END IF;
+END PROCESS;
 end Behavioral;

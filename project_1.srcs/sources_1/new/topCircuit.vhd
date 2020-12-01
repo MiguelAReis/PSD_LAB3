@@ -21,7 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+use IEEE.STD_LOGIC_ARITH.all;
+use IEEE.STD_LOGIC_UNSIGNED.all;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -42,7 +43,7 @@ end topCircuit;
 architecture Behavioral of topCircuit is
 
 SIGNAL enINCounter, enOUTCounter : STD_LOGIC;
-SIGNAL final : STD_LOGIC;
+SIGNAL final, var: STD_LOGIC;
 SIGNAL INCount, OUTCount : STD_LOGIC_VECTOR(5 downto 0);
 SIGNAL muxSel : STD_LOGIC_VECTOR(1 downto 0);
 SIGNAL memINOut,muxOut, memOutOut, valueOutR, valueOutI, valueOutIDelayed, averageOutR, averageOutI: STD_LOGIC_VECTOR(31 downto 0);
@@ -121,7 +122,7 @@ inst_StateMachine : StateMachine port map(
 	rst => rst,
 	start => start,
     final => final,
-    var => INCount(5), 
+    var => var, 
     enINCounter => enINCounter,
     enOUTCounter => enOUTCounter,
     muxSel => muxSel);
@@ -177,5 +178,14 @@ inst_datapath: datapath port map(
     valueOutI => valueOutI,
     averageOutR => averageOutR,
     averageOutI => averageOutI);
+    
+    
+PROCESS(INCount)
+BEGIN
+IF INCount = 37 THEN
+    var <='1';
+ELSE var <='0';
+END IF;
 
+END PROCESS;
 end Behavioral;
