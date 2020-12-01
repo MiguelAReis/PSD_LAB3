@@ -44,7 +44,7 @@ entity datapath is
            minID : out STD_LOGIC_VECTOR (3 downto 0);
            valueOutR :out STD_LOGIC_VECTOR (31 downto 0);
            valueOutI :out STD_LOGIC_VECTOR (31 downto 0);
-           averagesOutR: out STD_LOGIC_VECTOR (31 downto 0);
+           averageOutR: out STD_LOGIC_VECTOR (31 downto 0);
            averageOutI: out STD_LOGIC_VECTOR (31 downto 0));
 end datapath;
 

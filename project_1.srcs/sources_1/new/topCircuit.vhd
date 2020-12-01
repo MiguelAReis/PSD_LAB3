@@ -35,8 +35,8 @@ entity topCircuit is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            start : in STD_LOGIC;
-           maxID : out STD_LOGIC_VECTOR(4 downto 0);
-           minID : out STD_LOGIC_VECTOR(4 downto 0));
+           maxID : out STD_LOGIC_VECTOR(3 downto 0);
+           minID : out STD_LOGIC_VECTOR(3 downto 0));
 end topCircuit;
 
 architecture Behavioral of topCircuit is
@@ -68,7 +68,7 @@ end COMPONENT;
 COMPONENT memIN is
   port (
     clk    : in  std_logic;
-    addr   : in  std_logic_vector(9 downto 0);
+    addr   : in  std_logic_vector(5 downto 0);
     memOut : out std_logic_vector(31 downto 0)
     );
 end COMPONENT;
@@ -76,7 +76,7 @@ end COMPONENT;
 COMPONENT memOUT is
   port (
     clk     : in  std_logic;
-    addr    : in  std_logic_vector(9 downto 0);
+    addr    : in  std_logic_vector(5 downto 0);
     we      : in  std_logic;
     dataIN  : in  std_logic_vector(31 downto 0);
     dataOUT : out  std_logic_vector(31 downto 0)
@@ -93,7 +93,7 @@ COMPONENT datapath is
            minID : out STD_LOGIC_VECTOR (3 downto 0);
            valueOutR :out STD_LOGIC_VECTOR (31 downto 0);
            valueOutI :out STD_LOGIC_VECTOR (31 downto 0);
-           averagesOutR: out STD_LOGIC_VECTOR (31 downto 0);
+           averageOutR: out STD_LOGIC_VECTOR (31 downto 0);
            averageOutI: out STD_LOGIC_VECTOR (31 downto 0));
 end COMPONENT;
 
@@ -175,7 +175,7 @@ inst_datapath: datapath port map(
     minID => minID,
     valueOutR => valueOutR,
     valueOutI => valueOutI,
-    averagesOutR => averageOutR,
+    averageOutR => averageOutR,
     averageOutI => averageOutI);
 
 end Behavioral;

@@ -35,17 +35,17 @@ begin
                     END IF;
                 WHEN s1 =>
                     IF final = '1' THEN
-                        state <= s1;
-                    ELSE
                         state <= s2;
+                    ELSE
+                        state <= s1;
                     END IF;
                 WHEN s2 =>
                     state <= s3;
                 WHEN s3 =>
                     IF var = '1' THEN
-                        state <= s1;
-                    ELSE
                         state <= s4;
+                    ELSE
+                        state <= s1;
                     END IF;
                 WHEN s4=>
                     state <= s5;

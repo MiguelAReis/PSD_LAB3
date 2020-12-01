@@ -11,7 +11,7 @@ use UNIMACRO.vcomponents.all;
 entity memIN is
   port (
     clk    : in  std_logic;
-    addr   : in  std_logic_vector(9 downto 0);
+    addr   : in  std_logic_vector(5 downto 0);
     memOut : out std_logic_vector(31 downto 0)
     );
 end memIN;
@@ -19,8 +19,10 @@ end memIN;
 
 architecture behavioural of MemIN is
   signal dout: std_logic_vector(31 downto 0);
+  signal addr9 : std_logic_vector(9 downto 0);
 begin
 
+addr9 <="0000"&addr;
   MEM_in : BRAM_SINGLE_MACRO
     generic map (          -- memory initialization
       BRAM_SIZE => "36Kb", -- Target BRAM, "18Kb" or "36Kb"
@@ -34,7 +36,7 @@ begin
     )
     port map (
       CLK   => clk,         -- Clock
-      ADDR  => addr,        -- 9-bit Address Input, width defined by read/write port depth
+      ADDR  => addr9,        -- 9-bit Address Input, width defined by read/write port depth
       DI    => x"00000000", -- 32-bit Data Input, width defined by WRITE_WIDTH parameter
       DO    => memOut,       -- 32-bit Data Output, width defined by READ_WIDTH parameter
       EN    => '1',         -- 1-bit RAM Enable Input
