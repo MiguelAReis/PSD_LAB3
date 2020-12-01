@@ -41,7 +41,6 @@ COMPONENT datapath is
            rst : in STD_LOGIC;
            selectReg : in STD_LOGIC_VECTOR (1 downto 0);
            memIn : in STD_LOGIC_VECTOR (31 downto 0);
-           selectOut : in STD_LOGIC;
            maxID : out STD_LOGIC_VECTOR (3 downto 0);
            minID : out STD_LOGIC_VECTOR (3 downto 0);
            valueOutR :out STD_LOGIC_VECTOR (31 downto 0);
@@ -71,7 +70,6 @@ uut : datapath PORT MAP (
    rst  => rst,
    selectReg  => selectReg,
    memIn  => memIn,
-   selectOut  => selectOut,
    maxID  => maxID,
    minID  => minID,
    valueOutR  => valueOutR,
@@ -95,11 +93,11 @@ uut : datapath PORT MAP (
                     
                     
 --                        | Real     |    |   Imag   |
-            memIn <= "00000000000000000000000000000000" AFTER 10ns,
-                     "00000000000010010000000000000011" AFTER 60ns, --A + B
-                     "00000000000000100000000000000110" AFTER 70ns, --C + D
-                     "00000000000001100000000000001100" AFTER 80ns, --E + F
-                     "00000000000010010000000000011000" AFTER 90ns, --G + H
+            memIn <= "00000000000010010000000000011000" AFTER 10ns,
+                     X"AD520469" AFTER 60ns, --A + B
+                     X"BE2301ED" AFTER 70ns, --C + D
+                     X"CAF70DD1" AFTER 80ns, --E + F
+                     X"D213060A" AFTER 90ns, --G + H
                      "00000000000000000000000000000000" AFTER 100ns;
                      
             

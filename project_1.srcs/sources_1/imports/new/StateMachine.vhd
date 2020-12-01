@@ -62,20 +62,20 @@ begin
     BEGIN
         CASE state IS 
             WHEN s0=> 
-				enINCounter <= '1';
+				enINCounter <= '0';
 				enOUTCounter <= '0';
-				muxSel <= "XX";
+				muxSel <= "00";
 			WHEN s1=>
 				enINCounter <= '1';
-				enOUTCounter <= '1';
+				enOUTCounter <= '0';
 				muxSel <= "00";
 			WHEN s2=>
 				enINCounter <= '1';
 				enOUTCounter <= '1';
 				muxSel <= "00";
 			WHEN s3=>
-				enINCounter <= '0';
-				enOUTCounter <= '0';
+				enINCounter <= '1';
+				enOUTCounter <= '1';
 				muxSel <= "01";
 			WHEN s4=>
 				enINCounter <= '0';

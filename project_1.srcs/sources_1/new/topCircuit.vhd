@@ -146,7 +146,7 @@ inst_memIN : memIN port map(
 inst_memOut : memOut port map(
     clk     => clk,
     addr   => OUTCount,
-    we      => enINCounter,
+    we      => enOUTCounter,
     dataIN  => muxOut,
     dataOUT => memOutOut);
     

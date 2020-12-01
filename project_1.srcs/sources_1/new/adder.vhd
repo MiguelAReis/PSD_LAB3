@@ -48,8 +48,8 @@ entity adder is
 end adder;
 
 architecture Behavioral of adder is
-SIGNAL max, min :STD_LOGIC_VECTOR(23 downto 0);
-SIGNAL sum : STD_LOGIC_VECTOR (23 downto 0);
+SIGNAL max, min :STD_LOGIC_VECTOR(31 downto 0);
+SIGNAL sum : STD_LOGIC_VECTOR (31 downto 0);
 signal ID : STD_LOGIC_VECTOR (3 downto 0);
 
 begin
@@ -62,7 +62,7 @@ BEGIN
             maxR<= (others =>'0');
             maxI <= (others =>'0');
             max <= (others =>'0');
-            min <= (23 => '0', others =>'1');
+            min <= (31 => '0', others =>'1');
             maxID <= (others =>'0');
             minID <= (others =>'0'); 
             ID <= (others =>'0');
@@ -86,7 +86,7 @@ END PROCESS;
 
 PROCESS(A,B)
 BEGIN
-    sum <= abs(A)+abs(B);
+    sum <= SXT(abs(A)+abs(B),32);
 END PROCESS;
 
 

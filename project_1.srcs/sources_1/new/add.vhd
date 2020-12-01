@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 11/28/2020 10:01:11 PM
+-- Create Date: 11/28/2020 02:43:29 PM
 -- Design Name: 
--- Module Name: delay - Behavioral
+-- Module Name: subtractor - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -21,6 +21,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_SIGNED.all;
+
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,24 +33,24 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity delay is
+entity add is
     Port ( clk : in STD_LOGIC;
-           D : in STD_LOGIC;
-           Q: out STD_LOGIC);
-end delay;
+           A : in STD_LOGIC_VECTOR (23 downto 0);
+           B : in STD_LOGIC_VECTOR (23 downto 0);
+           Q : out STD_LOGIC_VECTOR (23 downto 0));
+end add;
 
-architecture Behavioral of delay is
+architecture Behavioral of add is
 
-SIGNAL n0,n1,n2 : STD_LOGIC;
 begin
-PROCESS(clk)
-    BEGIN
-        IF clk'event and clk ='1' then
-            n0 <= D;
-            n1 <= n0;
-            n2 <= n1;
-            Q <= n2;
 
-        END IF;
+PROCESS(clk)
+BEGIN
+    IF clk'event and clk ='1' then
+        Q<=A+B;
+    END IF;
 END PROCESS;
+
+
+
 end Behavioral;

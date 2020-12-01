@@ -53,8 +53,8 @@ SIGNAL en0, en1, en2: STD_LOGIC;
 SIGNAL reg0, reg1, reg2 :STD_LOGIC_VECTOR(23 downto 0);
 SIGNAL memConverted:STD_LOGIC_VECTOR (23 downto 0);
 SIGNAL A, B, C, D, E, F, G, H: STD_LOGIC_VECTOR(11 downto 0);
-SIGNAL mult0, mult1, mult2, mult3:STD_LOGIC_VECTOR (23 downto 0);
-SIGNAL sub0, sub1:STD_LOGIC_VECTOR (23 downto 0);
+SIGNAL mult0, mult1, mult2, mult3, mult4, mult5, mult6, mult7:STD_LOGIC_VECTOR (23 downto 0);
+SIGNAL sub0, sub1, add2, add3, sub4, sub5:STD_LOGIC_VECTOR (23 downto 0);
 SIGNAL enDelayed:STD_LOGIC;
 SIGNAL detR, detI:STD_LOGIC_VECTOR (31 downto 0);
 SIGNAL avgR, avgI:STD_LOGIC_VECTOR (31 downto 0);
@@ -75,6 +75,13 @@ COMPONENT mult is
 end COMPONENT;
 
 COMPONENT subtractor is
+    Port ( clk : in STD_LOGIC;
+           A : in STD_LOGIC_VECTOR (23 downto 0);
+           B : in STD_LOGIC_VECTOR (23 downto 0);
+           Q : out STD_LOGIC_VECTOR (23 downto 0));
+end COMPONENT;
+
+COMPONENT add is
     Port ( clk : in STD_LOGIC;
            A : in STD_LOGIC_VECTOR (23 downto 0);
            B : in STD_LOGIC_VECTOR (23 downto 0);
@@ -129,8 +136,8 @@ F<=reg2(11 downto 0);
 G<=memConverted(23 downto 12);
 H<=memConverted(11 downto 0);
 
-detR <= SXT(sub0&"0000",32);
-detI <= SXT(sub1&"0000",32);
+detR <= SXT(sub4&sub4(0)&sub4(0)&sub4(0)&sub4(0),32);
+detI <= SXT(sub5&sub5(0)&sub5(0)&sub5(0)&sub5(0),32);
 valueOutR<=detR;
 valueOutI<=detI;
 
@@ -171,14 +178,14 @@ inst_mult0 : mult port map(
 
 inst_mult1 : mult port map(
     clk => clk,
-    A => C,
-    B => E,
+    A => B,
+    B => H,
     Q => mult1);
 
 inst_mult2 : mult port map(
     clk => clk,
-    A => B,
-    B => H,
+    A => C,
+    B => E,
     Q => mult2);
 
 inst_mult3 : mult port map(
@@ -186,6 +193,30 @@ inst_mult3 : mult port map(
     A => D,
     B => F,
     Q => mult3);
+    
+inst_mult4 : mult port map(
+    clk => clk,
+    A => A,
+    B => H,
+    Q => mult4);
+
+inst_mult5 : mult port map(
+    clk => clk,
+    A => B,
+    B => G,
+    Q => mult5);
+
+inst_mult6 : mult port map(
+    clk => clk,
+    A => C,
+    B => F,
+    Q => mult6);
+
+inst_mult7 : mult port map(
+    clk => clk,
+    A => D,
+    B => E,
+    Q => mult7);
     
 inst_sub0: subtractor port map(
     clk => clk,
@@ -198,12 +229,36 @@ inst_sub1: subtractor port map(
     A => mult2,
     B => mult3,
     Q => sub1);
+
+inst_add2: add port map(
+    clk => clk,
+    A => mult4,
+    B => mult5,
+    Q => add2);
+    
+inst_add3: add port map(
+    clk => clk,
+    A => mult6,
+    B => mult7,
+    Q => add3);
+
+inst_sub4: subtractor port map(
+    clk => clk,
+    A => sub0,
+    B => sub1,
+    Q => sub4);
+    
+inst_sub5: subtractor port map(
+    clk => clk,
+    A => add2,
+    B => add3,
+    Q => sub5);
     
 inst_adder0: adder port map(
     clk => clk,
     rst => rst,
-    A => sub0,
-    B => sub1,
+    A => sub5,
+    B => sub4,
     en => enDelayed,
     minID => minID ,
     maxID =>maxID);

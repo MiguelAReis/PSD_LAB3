@@ -54,6 +54,6 @@ PROCESS(clk)
             end if;
         end if;
     END PROCESS;
-Q<= SXT(sum(31 downto 4),32); -- dividir por 8
+Q<= SXT(sum(31 downto 3),32); -- dividir por 8
 
 end Behavioral;
