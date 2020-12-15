@@ -32,15 +32,19 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity topCircuit is
+entity circuit is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            start : in STD_LOGIC;
            maxID : out STD_LOGIC_VECTOR(3 downto 0);
-           minID : out STD_LOGIC_VECTOR(3 downto 0));
-end topCircuit;
+           minID : out STD_LOGIC_VECTOR(3 downto 0);
+           we: out STD_LOGIC;
+           dataIN : out std_logic_vector(31 downto 0);
+           addr: out  std_logic_vector(7 downto 0));
+end circuit;
 
-architecture Behavioral of topCircuit is
+
+architecture Behavioral of circuit is
 
 SIGNAL enINCounter, enOUTCounter : STD_LOGIC;
 SIGNAL final, var: STD_LOGIC;
@@ -74,15 +78,6 @@ COMPONENT memIN is
     );
 end COMPONENT;
 
-COMPONENT memOUT is
-  port (
-    clk     : in  std_logic;
-    addr    : in  std_logic_vector(5 downto 0);
-    we      : in  std_logic;
-    dataIN  : in  std_logic_vector(31 downto 0);
-    dataOUT : out  std_logic_vector(31 downto 0)
-    );
-end COMPONENT;
 
 COMPONENT datapath is
     Port ( clk : in STD_LOGIC;
@@ -126,6 +121,11 @@ inst_StateMachine : StateMachine port map(
     enINCounter => enINCounter,
     enOUTCounter => enOUTCounter,
     muxSel => muxSel);
+    
+    addr <="00"&OUTCount;
+    we <= enOUTCounter;
+    dataIN <= muxOut;
+    
 
 inst_counter0 : counter port map(
     clk => clk,
@@ -144,12 +144,7 @@ inst_memIN : memIN port map(
     addr   => InCount,
     memOut => memINOut);
     
-inst_memOut : memOut port map(
-    clk     => clk,
-    addr   => OUTCount,
-    we      => enOUTCounter,
-    dataIN  => muxOut,
-    dataOUT => memOutOut);
+
     
 inst_multiplexer : multiplexer port map(
     inBus0 => valueOutR,

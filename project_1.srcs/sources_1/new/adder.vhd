@@ -66,7 +66,7 @@ BEGIN
             maxID <= (others =>'0');
             minID <= (others =>'0'); 
             ID <= (others =>'0');
-        ELSIF en ='1' then
+        ELSIF en ='1' AND ID(3) = '0' then
             ID <=ID+'1';    
             IF sum > max then
                 max <= sum;
@@ -86,7 +86,7 @@ END PROCESS;
 
 PROCESS(A,B)
 BEGIN
-    sum <= SXT(abs(A)+abs(B),32);
+    sum <= abs(SXT(A&"0000",32))+abs(SXT(B&"0000",32));
 END PROCESS;
 
 

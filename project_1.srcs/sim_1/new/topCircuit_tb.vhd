@@ -31,24 +31,30 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity topCircuit_tb is
+entity circuit_tb is
 --  Port ( );
-end topCircuit_tb;
+end circuit_tb;
 
 
 
-architecture Behavioral of topCircuit_tb is
+architecture Behavioral of circuit_tb is
 
-COMPONENT topCircuit is
+COMPONENT circuit is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            start : in STD_LOGIC;
            maxID : out STD_LOGIC_VECTOR(3 downto 0);
-           minID : out STD_LOGIC_VECTOR(3 downto 0));
+           minID : out STD_LOGIC_VECTOR(3 downto 0);
+           we: out STD_LOGIC;
+           dataIN : out std_logic_vector(31 downto 0);
+           addr: out  std_logic_vector(7 downto 0));
 end COMPONENT;
 
   SIGNAL clk : std_logic :='0';
   SIGNAL rst : std_logic :='0';
+  SIGNAL we : std_logic :='0';
+  SIGNAL dataIN : std_logic_vector(31 downto 0):=(others => '0');
+  SIGNAL addr : std_logic_vector(7 downto 0):=(others => '0');
   SIGNAL start : std_logic :='0';
   SIGNAL maxID : std_logic_VECTOR (3 downto 0) :="0000";
   SIGNAL minID : std_logic_VECTOR (3 downto 0) :="0000";
@@ -58,12 +64,15 @@ end COMPONENT;
 
 begin
 
-uut : topCircuit PORT MAP(
+uut : circuit PORT MAP(
     clk => clk,
     rst => rst,
     start => start,
     maxID => maxID,
-    minID => minID);
+    minID => minID,
+    we => we,
+    dataIN => dataIN,
+    addr => addr);
 
 
 

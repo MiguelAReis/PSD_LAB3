@@ -50,10 +50,10 @@ PROCESS(clk)
             IF rst='1' then
                 sum<=(others => '0');
             ELSIF en='1' then
-                sum <=sum +D;
+                sum <=sum +SXT(D(31 downto 4),32);
             end if;
         end if;
     END PROCESS;
-Q<= SXT(sum(31 downto 3),32); -- dividir por 8
+Q<= sum(30 downto 0)&'0'; -- dividir por 8
 
 end Behavioral;

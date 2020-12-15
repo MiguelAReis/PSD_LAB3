@@ -136,8 +136,8 @@ F<=reg2(11 downto 0);
 G<=memConverted(23 downto 12);
 H<=memConverted(11 downto 0);
 
-detR <= SXT(sub4&sub4(0)&sub4(0)&sub4(0)&sub4(0),32);
-detI <= SXT(sub5&sub5(0)&sub5(0)&sub5(0)&sub5(0),32);
+detR <= SXT(sub4&"0000",32);
+detI <= SXT(sub5&"0000",32);
 
 
 final<= enDelayed;
